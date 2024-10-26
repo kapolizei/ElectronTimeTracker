@@ -11,16 +11,16 @@ export default function Header() {
                 <nav>
                     <ul className="flex space-x-6">
                         <li>
-                            <NavLink className="text-white hover:text-gray-300" to={'/statistic'}>Statistic</NavLink>
+                            <NavLink className="text-white hover:text-blue-500 transition-all" to={'/statistic'}>Statistic</NavLink>
                         </li>
                         <li>
-                            <NavLink className="text-white hover:text-gray-300" to={'/screen'}>Test</NavLink>
+                            <NavLink className="text-white hover:text-blue-500 transition-all" to={'/screen'}>Screenshot test</NavLink>
                         </li>
                         <li>
-                            <a href="#" className="text-white hover:text-gray-300">Services</a>
+                            <a href="#" className="text-white transition-all disabled pointer-events-none">Services</a>
                         </li>
                         <li>
-                            <a href="#" className="text-white hover:text-gray-300">Contact</a>
+                            <a href="#" className="text-white disabled pointer-events-none">Contact</a>
                         </li>
                     </ul>
                 </nav>

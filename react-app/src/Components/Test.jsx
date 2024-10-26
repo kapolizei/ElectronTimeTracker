@@ -1,5 +1,6 @@
 // src/Components/ScreenshotButton.jsx
 import React, { useEffect, useState } from 'react';
+import Header from "./Header";
 
 const Test = () => {
     const [message, setMessage] = useState('');
@@ -41,6 +42,7 @@ const Test = () => {
 
     return (
         <div>
+             <Header/>
             <button onClick={handleTakeScreenshot}>Сделать скриншот</button>
             <div>{message}</div>
         </div>

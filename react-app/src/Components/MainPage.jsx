@@ -58,7 +58,7 @@ export default function MainPage() {
     }
 
     const handleSave = () => {
-        if (isRunning) {
+        if (isRunning || isPaused) {
             const savedTimeInSeconds = elapsedTime;
             const newTotalSavedTime = totalSavedTime + savedTimeInSeconds;
             setTotalSavedTime(newTotalSavedTime);
@@ -109,7 +109,7 @@ export default function MainPage() {
     return (
         <>
             <Header />
-            <div className="h-screen w-screen bg-gray-300 flex flex-col items-center justify-center ">
+            <div className="h-screen w-screen flex flex-col items-center justify-center ">
                 <h1 className='text-gray-900 font-bold text-4xl '>Time Tracker</h1>
                 <p className='text-gray-900 text-3xl'>{actionShow ? formattedTime : "Start the timer"}</p>
                 <div className='flex-row space-x-4 p-5'>
