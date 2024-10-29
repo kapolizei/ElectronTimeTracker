@@ -22,19 +22,16 @@ $data = json_decode($json, true);
 $number = $data['number'];
 
 if (isset($data['number'])) {
-    // 1. Извлекаем текущее значение
-    $sql = "SELECT hours_worked FROM time_tracking LIMIT 1"; // Измените LIMIT, если у вас несколько записей
+    $sql = "SELECT hours_worked FROM time_tracking LIMIT 1";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
         $row = mysqli_fetch_assoc($result);
-        $currentValue = isset($row['hours_worked']) ? (int)$row['hours_worked'] : 0; // Приводим к целому типу или 0, если нет
+        $currentValue = isset($row['hours_worked']) ? (int)$row['hours_worked'] : 0;
 
-        // 2. Сложите текущее значение с новым
         $newValue = $currentValue + (int)$number; // Приводим к целому типу
 
-        // 3. Обновляем запись в базе данных
-        $updateSql = "UPDATE time_tracking SET hours_worked = '$newValue'"; // Если у вас одна запись, это сработает
+        $updateSql = "UPDATE time_tracking SET hours_worked = '$newValue'";
         try {
             mysqli_query($conn, $updateSql);
             echo "Record updated successfully with new value = $newValue";
