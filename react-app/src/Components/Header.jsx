@@ -1,9 +1,10 @@
 import '../App.css';
+
 import {NavLink} from "react-router-dom";
 
 export default function Header() {
     return (
-        <header className="bg-gray-600 p-4 shadow-lg sticky top-0 z-50 h-full w-full">
+        <header className="bg-gray-600 p-4 shadow-lg sticky top-0 z-50 absolute">
             <div className=" mx-auto flex justify-between items-center">
                 <div className="text-white text-2xl font-bold">
                     <a href="#">TimeTracker</a>
@@ -23,6 +24,8 @@ export default function Header() {
                             <a href="#" className="text-white disabled pointer-events-none">Contact</a>
                         </li>
                     </ul>
+
+
                 </nav>
             </div>
         </header>

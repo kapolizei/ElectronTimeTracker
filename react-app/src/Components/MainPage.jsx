@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import '../App.css';
 import Header from "./Header";
 import axios from 'axios';
+import ActionButton from "./ActionButton";
+
+
+
+
+
 export default function MainPage() {
     const [isRunning, setIsRunning] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -118,26 +124,10 @@ export default function MainPage() {
         };
 
 
-        const testSave = async () => {
-            const numberToSave = elapsedTime;
-            console.log("Sending data:", {number: numberToSave});
-            try {
-                const response = await axios.post("http://localhost:8000/index.php", {
-                    number: numberToSave
-                });
-                console.log(response.data);
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        };
-
-
-        const handleDelete = () => {
-            localStorage.removeItem('savedItems');
-            localStorage.removeItem('totalSavedTime');
-            setItems([]);
-            setTotalSavedTime(0);
-        }
+    const handleDelete = async (numberToSave) => {
+        setTotalSavedTime(0)
+        setElapsedTime(0)
+    };
 
         // Функция для форматирования общего времени
         const formatTotalTime = (totalSeconds) => {
@@ -154,9 +144,9 @@ export default function MainPage() {
 
 
         return (
-            <>
+            <div className="h-screen w-screen">
                 <Header/>
-                <div className="h-screen w-screen flex flex-col items-center justify-center ">
+                <div className=" flex flex-col items-center justify-center ">
                     <p className='text-gray-900 text-3xl'>{actionShow ? formattedTime : "Start the timer"}</p>
                     <div className='flex-row space-x-4 p-5'>
                         <button
@@ -168,6 +158,7 @@ export default function MainPage() {
                         <button onClick={handleSave}
                                 className='group bg-blue-300 text-white py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-yellow-600 focus:outline-none'>Save
                         </button>
+                        <ActionButton/>
                     </div>
                     <div
                         className='shadow-xl bg-gray-300 h-fit w-fit p-2 flex flex-col items-center justify-center rounded'>
@@ -180,7 +171,8 @@ export default function MainPage() {
                         </button>
                     </div>
                 </div>
-            </>
+            </div>
+
         );
     }
 
