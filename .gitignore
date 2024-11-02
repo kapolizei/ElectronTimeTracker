@@ -1,8 +1,8 @@
 
 # Игнорируем конфигурационные файлы
-/backend/.env
+
 /backend/.env.local
-/backend/.env.*.local
+
 
 # Игнорируем папки, которые не нужны
 /backend/var/
