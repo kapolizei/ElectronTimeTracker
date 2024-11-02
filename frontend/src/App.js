@@ -4,6 +4,7 @@ import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 import MainPage from "./Components/MainPage";
 import Test from "./Components/Test";
 import Statistic from "./Components/Statistic";
+import NameChange from "./Components/NameChange";
 
 function App() {
     return (

@@ -3,6 +3,7 @@ import '../App.css';
 import Header from "./Header";
 import axios from 'axios';
 import ActionButton from "./ActionButton";
+import NameChange from "./NameChange";
 
 
 
@@ -146,6 +147,8 @@ export default function MainPage() {
         return (
             <div className="h-screen w-screen">
                 <Header/>
+                <NameChange/>
+
                 <div className=" flex flex-col items-center justify-center ">
                     <p className='text-gray-900 text-3xl'>{actionShow ? formattedTime : "Start the timer"}</p>
                     <div className='flex-row space-x-4 p-5'>
@@ -174,5 +177,5 @@ export default function MainPage() {
             </div>
 
         );
-    }
+}
 
