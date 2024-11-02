@@ -1,3 +1,60 @@
-/electronjs/node_modules/
-/frontend/node_modules/
-.idea
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+# Папка кэша
+/var/
+/cache/
+/logs/
+
+# Папка для временных файлов
+/tmp/
+
+# Папка с сессиями
+/sessions/
+
+# Исключение .env файлов, если вы храните их в корне проекта
+.env
+.env.local
+.env.*.local
+
+# Папка для файлов сборки
+/public/build/
+public/bundles/
+
+# Логи
+*.log
+
+# Папки IDE
+/.idea/
+/.vscode/
+*.iml
+
+# Папка composer
+/vendor/
+
+# Модули npm
+/node_modules/
+
+# Папка с тестами
+/tests/
+# Папка с компилированными файлами
+/public/css/
+/public/js/
