@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +29,16 @@ class Task
      * @ORM\JoinColumn(nullable=false)
      */
     private $project;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TimeEntry::class, mappedBy="task")
+     */
+    private $timeEntries;
+
+    public function __construct()
+    {
+        $this->timeEntries = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -54,6 +66,36 @@ class Task
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TimeEntry>
+     */
+    public function getTimeEntries(): Collection
+    {
+        return $this->timeEntries;
+    }
+
+    public function addTimeEntry(TimeEntry $timeEntry): self
+    {
+        if (!$this->timeEntries->contains($timeEntry)) {
+            $this->timeEntries[] = $timeEntry;
+            $timeEntry->setTask($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeEntry(TimeEntry $timeEntry): self
+    {
+        if ($this->timeEntries->removeElement($timeEntry)) {
+            // set the owning side to null (unless already changed)
+            if ($timeEntry->getTask() === $this) {
+                $timeEntry->setTask(null);
+            }
+        }
 
         return $this;
     }

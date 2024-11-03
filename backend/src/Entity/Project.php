@@ -34,6 +34,21 @@ class Project
      */
     private $tasks;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $total_time;
+    public function getTotalTime(): ?int
+    {
+        return $this->total_time;
+    }
+
+    public function setTotalTime(?int $total_time): self
+    {
+        $this->total_time = $total_time;
+        return $this;
+    }
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -110,4 +125,16 @@ class Project
 
         return $this;
     }
+
+
+    public function toArray(): array
+    {
+        return [
+            'project' => $this->getTitle(),
+            'total_time' => $this->getTotalTime(),
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+        ];
+    }
+
 }

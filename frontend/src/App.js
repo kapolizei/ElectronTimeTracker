@@ -5,6 +5,7 @@ import MainPage from "./Components/MainPage";
 import Test from "./Components/Test";
 import Statistic from "./Components/Statistic";
 import NameChange from "./Components/NameChange";
+import ProjectCombobox from "./Components/ProjectCombobox";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/statistic" element={<Statistic />} />
                     <Route path="/screen" element={<Test />} />
+                    <Route path="/api" element={<ProjectCombobox />} />
                 </Routes>
             </HashRouter>
 

@@ -39,9 +39,15 @@ class User
      */
     private $projects;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TimeEntry::class, mappedBy="user")
+     */
+    private $timeEntries;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->timeEntries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,9 +121,39 @@ class User
     public function exportToArray(): array
     {
         return [
-            'id' => $this->id,
-            'login' => $this->login,
-            'email' => $this->email,
+            'id' => $this->getId(),
+            'login' => $this->getLogin(),
+            'email' => $this->getEmail(),
         ];
+    }
+
+    /**
+     * @return Collection<int, TimeEntry>
+     */
+    public function getTimeEntries(): Collection
+    {
+        return $this->timeEntries;
+    }
+
+    public function addTimeEntry(TimeEntry $timeEntry): self
+    {
+        if (!$this->timeEntries->contains($timeEntry)) {
+            $this->timeEntries[] = $timeEntry;
+            $timeEntry->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeEntry(TimeEntry $timeEntry): self
+    {
+        if ($this->timeEntries->removeElement($timeEntry)) {
+            // set the owning side to null (unless already changed)
+            if ($timeEntry->getUser() === $this) {
+                $timeEntry->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

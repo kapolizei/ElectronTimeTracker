@@ -4,6 +4,7 @@ import Header from "./Header";
 import axios from 'axios';
 import ActionButton from "./ActionButton";
 import NameChange from "./NameChange";
+import ProjectCombobox from "./ProjectCombobox";
 
 
 
@@ -145,12 +146,11 @@ export default function MainPage() {
 
 
         return (
-            <div className="h-screen w-screen">
+            <div className="bg-gray-400 h-screen w-screen">
                 <Header/>
-                <NameChange/>
-
                 <div className=" flex flex-col items-center justify-center ">
                     <p className='text-gray-900 text-3xl'>{actionShow ? formattedTime : "Start the timer"}</p>
+                    <ProjectCombobox/>
                     <div className='flex-row space-x-4 p-5'>
                         <button
                             className='bg-blue-300 text-white py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-yellow-600 focus:outline-none'

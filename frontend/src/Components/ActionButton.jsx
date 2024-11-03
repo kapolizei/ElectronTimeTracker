@@ -66,9 +66,9 @@ export default function ActionButton(props) {
                     </MenuItem>
                     <div className="my-1 h-px bg-white/5" />
                     <MenuItem>
-                        <button disabled className="disabled:opacity-50 disabled:cursor-not-allowed group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                        <button className=" group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                             <ArchiveBoxXMarkIcon className=" size-4 fill-white/30" />
-                            Archive
+                            Add project
                         </button>
                     </MenuItem>
                     <MenuItem>
