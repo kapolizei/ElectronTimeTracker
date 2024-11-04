@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import axios from "axios";
 
-export default function ProjectCombobox() {
+export default function ProjectCombobox({onProjectSelect}) {
     const [query, setQuery] = useState('')
     const [selected, setSelected] = useState(null)
     const [projects, setProjects] = useState([])
@@ -36,7 +36,8 @@ export default function ProjectCombobox() {
                 value={selected}
                 onChange={(value) => {
                     setSelected(value)
-                    setIsFocused(false) // Закрываем список при выборе значения
+                    onProjectSelect(value.id)
+                    console.log("Selected project id" ,value.id)
                 }}
                 onClose={() => setIsFocused(false)}
             >
@@ -49,13 +50,13 @@ export default function ProjectCombobox() {
                         displayValue={(project) => project?.title}
                         onChange={(event) => {
                             setQuery(event.target.value)
-                            setIsFocused(true) // Открываем список при вводе текста
+                            setIsFocused(true)
                         }}
-                        onFocus={() => setIsFocused(true)} // Открываем список при фокусе
+                        onFocus={() => setIsFocused(true)}
                     />
                     <ComboboxButton
                         className="group absolute inset-y-0 right-0 px-2.5"
-                        onClick={() => setIsFocused(!isFocused)} // Переключаем состояние
+                        onClick={() => setIsFocused(!isFocused)}
                     >
                         <ChevronDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
                     </ComboboxButton>
@@ -76,7 +77,7 @@ export default function ProjectCombobox() {
                             className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
                         >
                             <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
-                            <div className="text-sm/6 text-white">{project.title}</div>
+                            <div className="text-sm/6 text-white">{project.project}</div>
                         </ComboboxOption>
                     ))}
                 </ComboboxOptions>

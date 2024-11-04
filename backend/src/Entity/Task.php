@@ -100,4 +100,16 @@ class Task
         return $this;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'time_spent' => $this->getTimeEntries(),
+            'time_entries' => $this->getTimeEntries()->map(function ($e) {
+                return $e->exportToArray();
+            })->toArray(),
+        ];
+    }
+
 }

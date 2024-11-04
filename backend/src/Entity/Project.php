@@ -137,4 +137,16 @@ class Project
         ];
     }
 
+    public function reactStatisticArray(): array
+    {
+        return [
+            'project title' => $this->getTitle(),
+            'project id' => $this->getId(),
+            'total_time' => $this->getTotalTime(),
+            'tasks' => $this->getTasks()->map(function ($task) {
+                return $task->toArray();
+            })->toArray(),
+        ];
+    }
+
 }
