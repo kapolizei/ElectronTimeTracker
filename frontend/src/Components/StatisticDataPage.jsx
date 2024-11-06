@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {easyFormatTotalTime, formatTotalTime} from "./FormatTotalTime";
-import axios from "axios";
+
 export default function StatisticDataPage ({ fetchData }) {
     const [dataHours, setDataHours] = useState(0)
     const [apiData, setApiData] = useState([]);
     const [activeIndex, setActiveIndex] = useState(null);
-    const easyFormattedTime = easyFormatTotalTime(dataHours)
     const formattedTime = formatTotalTime(dataHours)
     const [showTasks, setShowTasks] = useState(false);
 
@@ -13,11 +12,13 @@ export default function StatisticDataPage ({ fetchData }) {
         return <p>Loading...</p>;
     }
 
-    const projectKey = Object.keys(fetchData)[0];
-    const projectInfo = fetchData[projectKey] || {}; // Предотвращаем доступ к undefined
+    const projectKey = Object.keys(fetchData)[1];
+    const projectInfo = fetchData[projectKey] || {};
     const projectTitle = projectInfo["project title"] || "No project title available";
-    const totalTime = projectInfo["total_time"] || 0;
+
+    const totalTime = fetchData["TotalTime"] || 0;
     const tasks = projectInfo["tasks"] || [];
+    const easyFormattedTime = easyFormatTotalTime(totalTime)
 
 
 
@@ -73,8 +74,7 @@ export default function StatisticDataPage ({ fetchData }) {
             <div className="text-blue-50 w-full h-1/3  rounded-lg p-2 flex items-stretch border-2 min-w-max">
                 {/* Левый элемент */}
                 <div className="w-1/3 flex justify-center items-center text-green-500 ">
-                    <h1>TIME: </h1><br/>
-                    <h2>{formattedTime}</h2>
+                    <h1>TIME: {easyFormattedTime}</h1><br/>
                 </div>
 
                 {/* Разделяющая линия */}
@@ -82,8 +82,7 @@ export default function StatisticDataPage ({ fetchData }) {
 
                 {/* Центральный элемент */}
                 <div className="w-1/3 flex justify-center items-center text-green-500">
-                    <h1>AVG ACTIVITY</h1>
-                    <h2>///</h2>
+                    <h1>AVG ACTIVITY 55%</h1>
                 </div>
 
                 {/* Разделяющая линия */}

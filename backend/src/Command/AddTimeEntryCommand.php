@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Entity\User;
-class TimeEntryCommand extends Command
+class AddTimeEntryCommand extends Command
 {
     protected static $defaultName = 'app:time-entry';
     protected static $defaultDescription = 'Time Entry Test Command';

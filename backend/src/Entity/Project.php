@@ -142,7 +142,7 @@ class Project
         return [
             'project title' => $this->getTitle(),
             'project id' => $this->getId(),
-            'total_time' => $this->getTotalTime(),
+            'user' => $this->getUsers()->toArray(),
             'tasks' => $this->getTasks()->map(function ($task) {
                 return $task->toArray();
             })->toArray(),
