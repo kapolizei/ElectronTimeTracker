@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import '../App.css';
 import Header from "./Header";
-import axios from 'axios';
 import ActionButton from "./ActionButton";
 import ProjectCombobox from "./ProjectCombobox";
-import {easyFormatTotalTime, formatTotalTime} from "./FormatTotalTime";
+import {easyFormatTotalTime, FormatMin, formatTotalTime} from "./FormatTotalTime";
 
 
 export default function MainPage() {
@@ -15,13 +14,12 @@ export default function MainPage() {
     const [actionShow, setIsActionShow] = useState(false);
     const [totalSavedTime, setTotalSavedTime] = useState(0); // Состояние для общего времени
 
-    const [items, setItems] = useState([]);
-
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
     const [selectedProject, setSelectedProject] = useState(null)
     const [fetchData, setFetchData] = useState([])
-    const totalTime = fetchData["TotalTime"] || 0;
+    const totalTime = fetchData["total_time"] || 0;
+    const projectTitle = fetchData['project_title'];
 
     const LazyLoad = () => {
             const [isVisible, setIsVisible] = useState(false);
@@ -33,7 +31,8 @@ export default function MainPage() {
             }, []);
             return (
                 <div>
-                    {isVisible ? <p>{formatTotalTime(totalTime)}</p> : <p>Loading...</p>}
+                    {isVisible ? <p>{FormatMin(totalTime)}</p> : <p>Loading...</p>}
+                    <p className="justify-center items-center">Project Name: {projectTitle}</p>
                 </div>
             );
         };
@@ -48,7 +47,7 @@ export default function MainPage() {
         if (selectedProject) {
             const fetchStatistics = async () => {
                 try {
-                    const response = await fetch(`https://localhost:8000/api/project/${selectedProject}/statistic`);
+                    const response = await fetch(`https://localhost:8000/api/time/project/${selectedProject}`);
                     const data = await response.json();
                     setFetchData(data);
                     console.log("data:",data)
@@ -104,7 +103,18 @@ export default function MainPage() {
             setTimerId(timerId);
         }
 
-        function handlePause() {
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
+
+
+    function handlePause() {
             if (isRunning) {
                 setIsRunning(false);
                 setIsPaused(true);
@@ -119,11 +129,12 @@ export default function MainPage() {
 
                 const now = new Date();
                 setEndTime(now)
-                console.log('Timer End At:',now)
 
-                const startedAt = startTime.toISOString().slice(0, 19).replace('T', ' ');
-                const endAt = now.toISOString().slice(0, 19).replace('T', ' ');
-                saveToDatabase(startedAt, endAt, elapsedTime);
+                const startedAt = formatDate(startTime);
+                const endAt = formatDate(now)
+                const task_id = 1;
+                console.log(startedAt,'end at:', endAt)
+                saveToDatabase(startedAt, endAt, elapsedTime, task_id,selectedProject);
 
                 setStartTime(null)
                 setEndTime(null)
@@ -132,11 +143,10 @@ export default function MainPage() {
             }
         }
 
-    const saveToDatabase = (startedAt, endAt, elapsedSeconds) => {
-        console.log("Сохраняем в БД:", { startedAt, endAt, elapsedSeconds });
+    const saveToDatabase = (startedAt, endAt, elapsedSeconds, task_id,selectedProject) => {
+        console.log("Перед сохранением:", { startedAt, endAt, elapsedSeconds });
 
-
-        fetch('/api/save_time_entry', {
+        fetch('https://localhost:8000/api/save_time_entry', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -144,16 +154,9 @@ export default function MainPage() {
             body: JSON.stringify({
                 started_at: startedAt,
                 end_at: endAt,
-/*
-                elapsed_seconds: elapsedSeconds,
-*/
                 user_id: 1,
-/*
-                task_id: 1,
-*/
-/*
-                project_id: {projectId}
-*/
+                project_id: selectedProject,
+                task_id: task_id,
             })
         })
             .then(response => response.json())

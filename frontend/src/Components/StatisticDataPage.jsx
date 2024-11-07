@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {easyFormatTotalTime, formatTotalTime} from "./FormatTotalTime";
+import {easyFormatTotalTime, FormatMin, formatTotalTime} from "./FormatTotalTime";
 
 export default function StatisticDataPage ({ fetchData }) {
     const [dataHours, setDataHours] = useState(0)
@@ -18,7 +18,7 @@ export default function StatisticDataPage ({ fetchData }) {
 
     const totalTime = fetchData["TotalTime"] || 0;
     const tasks = projectInfo["tasks"] || [];
-    const easyFormattedTime = easyFormatTotalTime(totalTime)
+    const easyFormattedTime = FormatMin(totalTime)
 
 
 

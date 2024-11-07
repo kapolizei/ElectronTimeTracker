@@ -11,9 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Entity\TimeEntry;
 
-class CalculateDifferenceCommand extends Command
+class CalDiffPrIdCommand extends Command
 {
-    protected static $defaultName = 'app:calculate';
+    protected static $defaultName = 'app:calculateProject';
     protected static $defaultDescription = 'Difference between started_at and end_at';
     protected $objectManager;
 
@@ -21,7 +21,7 @@ class CalculateDifferenceCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('task', InputArgument::REQUIRED, 'ID Записи для вычесления общего времени');
+            ->addArgument('project', InputArgument::REQUIRED, 'ID Записи для вычесления общего времени');
     }
 
     public function __construct(EntityManagerInterface $objectManager)
@@ -32,32 +32,32 @@ class CalculateDifferenceCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $task = (int) $input->getArgument('task');
+        $project_id = (int) $input->getArgument('project');
         $repository = $this->objectManager->getRepository(TimeEntry::class);
 
-        $timeEntries = $repository->findBy(['task'=>$task]);
+        $timeEntries = $repository->findBy(['project'=>$project_id]);
         $totalTime = 0;
 
-       foreach ($timeEntries as $e) {
-           if ($e->getStartedAt() && $e->getEndAt()) {
-               $startTimestamp = $e->getStartedAt()->getTimestamp();
-               $endTimestamp = $e->getEndAt()->getTimestamp();
-               $totalTime += $endTimestamp - $startTimestamp;
-           } else {
-               $output->writeln(sprintf(
-                   'Запись с ID %d не имеет значения started_at или end_at и будет пропущена.',
+        foreach ($timeEntries as $e) {
+            if ($e->getStartedAt() && $e->getEndAt()) {
+                $startTimestamp = $e->getStartedAt()->getTimestamp();
+                $endTimestamp = $e->getEndAt()->getTimestamp();
+                $totalTime += $endTimestamp - $startTimestamp;
+            } else {
+                $output->writeln(sprintf(
+                    'Запись с ID %d не имеет значения started_at или end_at и будет пропущена.',
                     $e->getId()
-               ));
-           }
-       }
+                ));
+            }
+        }
         $formatedTime = $totalTime / 60;
 
 
 
         // Выводим результат
         $output->writeln(sprintf(
-            'Общее время для всех записей с task %d составляет: %d секунд. Общее время %d минут',
-            $task, $totalTime, $formatedTime
+            'Общее время для всех записей с project_id %d составляет: %d секунд. Общее время %d минут',
+            $project_id, $totalTime, $formatedTime
         ));
         return Command::SUCCESS;
     }
