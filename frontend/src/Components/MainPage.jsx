@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
 import '../App.css';
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import ActionButton from "./ActionButton";
 import ProjectCombobox from "./ProjectCombobox";
-import {easyFormatTotalTime, FormatMin, formatTotalTime} from "./FormatTotalTime";
+import {FormatMin} from "./FormatTotalTime";
 
 
 export default function MainPage() {
@@ -16,10 +16,20 @@ export default function MainPage() {
 
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
-    const [selectedProject, setSelectedProject] = useState(null)
     const [fetchData, setFetchData] = useState([])
     const totalTime = fetchData["total_time"] || 0;
     const projectTitle = fetchData['project_title'];
+
+    //LocalStorage Project
+    const [selectedProject, setSelectedProject] = useState(() => {
+        return localStorage.getItem('selectedProject') || null;
+    });
+
+    const handleProjectSelect = (projectId) => {
+        setSelectedProject(projectId);
+        localStorage.setItem("selectedProject", projectId)
+        console.log("selected", selectedProject, projectId)
+    };
 
     const LazyLoad = () => {
             const [isVisible, setIsVisible] = useState(false);
@@ -31,16 +41,13 @@ export default function MainPage() {
             }, []);
             return (
                 <div>
-                    {isVisible ? <p>{FormatMin(totalTime)}</p> : <p>Loading...</p>}
-                    <p className="justify-center items-center">Project Name: {projectTitle}</p>
+                    {isVisible ? <span>{FormatMin(totalTime)}</span> : <span>Loading...</span>}
+                    <div className="justify-center items-center">Project Name: {projectTitle}</div>
                 </div>
             );
         };
 
-    const handleProjectSelect = (projectId) => {
-        setSelectedProject(projectId);
-        console.log("selected", selectedProject)
-    };
+
 
 
     useEffect(() => {
@@ -58,35 +65,6 @@ export default function MainPage() {
             fetchStatistics();
         }
     }, [selectedProject]);
-
-        /*useEffect(() => {
-            const fetchData = async () => {
-                try {
-                    console.log("Fetching data");
-                    const response = await axios.get('http://localhost:8000/gettime.php');
-                    console.log("Response:", response.data);
-
-                    if (response.data) {
-                        const fetchedItems = response.data.savedItems || [];
-                        const fetchedTotalTime = Number(response.data[0].hours_worked) || 0;
-
-
-                        console.log("Fetched Total Time:", fetchedTotalTime); // Для отладки
-                        setApiData(response.data);
-                        setItems(fetchedItems);
-                        setTotalSavedTime(fetchedTotalTime);
-                    } else {
-                        console.error('No data found in response');
-                        setItems([]);
-                    }
-                } catch (error) {
-                    console.error('Error fetching data from server:', error);
-                    setItems([]);
-                }
-            };
-
-            fetchData();
-        }, []);*/
 
 
         function handleClick() {
@@ -164,61 +142,10 @@ export default function MainPage() {
             .catch(error => console.error("Ошибка сохранения:", error));
     };
 
-        /*const handleSave = async () => {
-            if (isRunning || isPaused) {
-                const savedTimeInSeconds = elapsedTime;
-                const newTotalSavedTime = totalSavedTime + savedTimeInSeconds;
-                setTotalSavedTime(newTotalSavedTime);
-
-                let formattedTime;
-                if (savedTimeInSeconds < 60) {
-                    formattedTime = `${savedTimeInSeconds} seconds`;
-                } else if (savedTimeInSeconds < 3600) {
-                    const minutes = Math.floor(savedTimeInSeconds / 60);
-                    const seconds = savedTimeInSeconds % 60;
-                    formattedTime = `${minutes} minutes ${seconds} seconds`;
-                } else {
-                    const hours = Math.floor(savedTimeInSeconds / 3600);
-                    const minutes = Math.floor((savedTimeInSeconds % 3600) / 60);
-                    const seconds = savedTimeInSeconds % 60;
-                    formattedTime = `${hours} hours ${minutes} minutes ${seconds} seconds`;
-                }
-                setElapsedTime(0);
-                clearInterval(timerId);
-                setIsRunning(false);
-
-                const numberToSave = formattedTime;
-
-                try {
-                    // Отправляем данные на сервер с использованием axios
-                    const response = await axios.post("http://localhost:8000/settotaltime.php", {
-                        number: numberToSave
-                    });
-                    if (response.data && response.data.message) {
-                        console.log(response.data.message); // Успешное сообщение
-                    }
-                    setItems(prevItems => [...prevItems, formattedTime]);
-                } catch (error) {
-                    console.error("Ошибка при сохранении данных:", error);
-                }
-            }
-        };*/
-
-
     const handleDelete = async (numberToSave) => {
         setTotalSavedTime(0)
         setElapsedTime(0)
     };
-
-    // Функция для форматирования общего времени
-    /*const formatTotalTime = (totalSeconds) => {
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        return `${hours} hours ${minutes} minutes ${seconds} seconds`;
-    };*/
-
-
 
     //Для отрисовки счетчика при запуске//
         const seconds = (elapsedTime % 60);

@@ -6,11 +6,18 @@ import ProjectCombobox from "./ProjectCombobox";
 import StatisticDataPage from "./StatisticDataPage";
 
 export default function Statistic() {
-    const [selectedProject, setSelectedProject] = useState(null)
     const [fetchData, setFetchData] = useState([])
+
+    //LocalStorage Project
+    const [selectedProject, setSelectedProject] = useState(() => {
+        return localStorage.getItem('selectedProject') || null;
+    });
     const handleProjectSelect = (projectId) => {
         setSelectedProject(projectId);
+        localStorage.setItem("selectedProject", projectId)
+        console.log("selected", selectedProject, projectId)
     };
+
     useEffect(() => {
         if (selectedProject) {
             const fetchStatistics = async () => {
@@ -28,15 +35,11 @@ export default function Statistic() {
         }
     }, [selectedProject]);
 
-
-
-
-
     return (
         <>
             <Header/>
 
-            <div className="flex flex-col w-screen h-1/2 p-5">
+            <div className="flex flex-col w-screen h-screen p-5">
                 {selectedProject === null ? (
                     <div>
                         <h3>Choose a project</h3>
