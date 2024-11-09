@@ -48,7 +48,13 @@ export default function MainPage() {
         };
 
 
-
+    useEffect(() => {
+        if (selectedProject !== null) {
+            localStorage.setItem('selectedProject', selectedProject);
+        } else {
+            localStorage.removeItem('selectedProject');
+        }
+    }, [selectedProject]);
 
     useEffect(() => {
         if (selectedProject) {

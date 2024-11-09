@@ -8,6 +8,11 @@ export default function ActionButton(props) {
     let [isOpen, setIsOpen] = useState(false);
     const inputRef = useRef(null)
 
+    const [selectedProject, setSelectedProject] = useState(() => {
+        return localStorage.getItem('selectedProject') || null;
+    });
+
+
     function handleEdit() {
         setIsOpen(true);
     }
@@ -42,6 +47,7 @@ export default function ActionButton(props) {
     return (
         <>
             <Menu>
+
                 <MenuButton className="transition duration-300 inline-flex items-center gap-2 rounded bg-blue-300 py-2 px-4 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-yellow-600 data-[open]:bg-yellow-600 data-[focus]:outline-1 data-[focus]:outline-white">
                     Options
                     <ChevronDownIcon className="size-4 fill-white/60" />
@@ -52,28 +58,52 @@ export default function ActionButton(props) {
                     anchor="bottom end"
                     className="w-52 origin-top-right rounded-xl border border-white/5 bg-gray-600 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                 >
+
                     <MenuItem>
                         <button onClick={handleEdit} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                             <PencilIcon className="size-4 fill-white/30" />
                             Add time
                         </button>
                     </MenuItem>
+
                     <MenuItem>
                         <button onClick={handleDelete} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                             <TrashIcon className="size-4 fill-white/30" />
                             Delete
                         </button>
                     </MenuItem>
+
                     <div className="my-1 h-px bg-white/5" />
+
                     <MenuItem>
-                        <button className=" group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                            <ArchiveBoxXMarkIcon className=" size-4 fill-white/30" />
+                        <button
+                            className=" group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                            <ArchiveBoxXMarkIcon className=" size-4 fill-white/30"/>
                             Add project
                         </button>
                     </MenuItem>
+
                     <MenuItem>
-                        <button disabled className="disabled:opacity-50 disabled:cursor-not-allowed group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                            <Square2StackIcon className="size-4 fill-white/30" />
+                        <button onClick={() => {
+                            setSelectedProject(null);
+                            localStorage.removeItem('selectedProject');
+                        }}
+                                className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                            <svg className="animate-spin h-5 w-5 text-white/30" xmlns="http://www.w3.org/2000/svg"
+                                 fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor"
+                                      d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l3 3-3 3v-4a8 8 0 01-8-8z"></path>
+                            </svg>
+                            Another Project
+                        </button>
+                    </MenuItem>
+
+                    <MenuItem>
+                        <button disabled
+                                className="disabled:opacity-50 disabled:cursor-not-allowed group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                            <Square2StackIcon className="size-4 fill-white/30"/>
                             Duplicate
                         </button>
                     </MenuItem>
