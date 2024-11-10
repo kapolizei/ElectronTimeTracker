@@ -2,7 +2,7 @@ import '../App.css';
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import ActionButton from "./ActionButton";
-import ProjectCombobox from "./ProjectCombobox";
+import SelectProject from "./SelectProject";
 import {FormatMin} from "./FormatTotalTime";
 
 
@@ -13,7 +13,6 @@ export default function MainPage() {
     const [isPaused, setIsPaused] = useState(false);
     const [actionShow, setIsActionShow] = useState(false);
     const [totalSavedTime, setTotalSavedTime] = useState(0); // Состояние для общего времени
-
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
     const [fetchData, setFetchData] = useState([])
@@ -40,7 +39,7 @@ export default function MainPage() {
                 return () => clearTimeout(timer);
             }, []);
             return (
-                <div>
+                <div className=''>
                     {isVisible ? <span>{FormatMin(totalTime)}</span> : <span>Loading...</span>}
                     <div className="justify-center items-center">Project Name: {projectTitle}</div>
                 </div>
@@ -107,7 +106,7 @@ export default function MainPage() {
         }
 
         const handleSave = () => {
-            if (isRunning) {
+            if (isRunning || isPaused) {
                 clearInterval(timerId)
                 setIsRunning(false)
 
@@ -161,49 +160,60 @@ export default function MainPage() {
     //
 
         return (
-            <div className="bg-gray-400 h-screen w-screen">
-                <Header/>
-                <div className="flex flex-col w-screen h-1/2 p-5">
-                    <div className="flex flex-col w-screen h-1/2 p-5">
+            <div className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 min-h-screen flex flex-col items-center justify-center pt-20">
+                <header className="fixed top-0 left-0 w-full shadow-lg py-4 z-10 text-center text-white">
+                    <Header/>
+                </header>
+                <div className=" shadow-2xl rounded-xl max-w-2xl p-8 mt-20">
+                    <div className="text-white mb-8 text-center">
                         {selectedProject === null ? (
                             <div>
-                                <h3>Choose a project</h3>
-                                <ProjectCombobox onProjectSelect={handleProjectSelect}/>
+                                <h3 className="text-2xl font-semibold">Choose a Project</h3>
+                                <SelectProject onProjectSelect={handleProjectSelect}/>
                             </div>
-
-
                         ) : (
                             <>
-                            <div className=" flex flex-col items-center justify-center ">
-                                <p className='text-gray-900 text-3xl'>{selectedProject ? formattedTime : "Start the timer"}</p>
-                                <div className='flex-row space-x-4 p-5'>
-                                    <button
-                                        className='bg-blue-300 text-white py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-yellow-600 focus:outline-none'
-                                        onClick={isRunning ? handlePause : handleClick}>
-                                        {isRunning ? 'Pause' : (isPaused ? 'Resume' : 'Start')}
-                                    </button>
-
-                                    <button onClick={handleSave}
-                                            className='group bg-blue-300 text-white py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-yellow-600 focus:outline-none'>Save
-                                    </button>
-                                    <ActionButton/>
-                                </div>
-                                <div
-                                    className='shadow-xl bg-gray-300 h-fit w-fit p-2 flex flex-col items-center justify-center rounded'>
-                                    <p className='text-gray-900'>
-                                        <LazyLoad/>
+                                <div className="text-center space-y-4 flex-col ">
+                                    <p className="text-gray-300 text-4xl font-semibold">
+                                        {selectedProject ? formattedTime : "Start the Timer"}
                                     </p>
-                                    <button
-                                        className='group bg-blue-300 text-white py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-yellow-600 focus:outline-none'
-                                        onClick={handleDelete}>Delete
-                                    </button>
+                                    <div className="flex items-center justify-center space-x-4">
+                                        <button
+                                            className={`py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-300 ease-in-out 
+                                    ${isRunning ? "bg-red-500 hover:bg-red-400" : "bg-blue-500 hover:bg-blue-400"}`}
+                                            onClick={isRunning ? handlePause : handleClick}
+                                        >
+                                            {isRunning ? 'Pause' : (isPaused ? 'Resume' : 'Start')}
+                                        </button>
+
+                                        <button
+                                            onClick={handleSave}
+                                            className="py-3 px-6 rounded-lg text-white font-semibold bg-green-500 hover:bg-green-400 transition-colors duration-300 ease-in-out"
+                                        >
+                                            Save
+                                        </button>
+
+                                        <ActionButton/>
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center mt-6 bg-gray-700 shadow-lg rounded-lg p-4 w-full max-w-md text-center">
+                                        <p className="text-gray-300 font-medium mb-2">
+                                            <LazyLoad/>
+                                        </p>
+                                        <button
+                                            onClick={handleDelete}
+                                            className="py-2 px-6 mt-3 bg-red-600 hover:bg-red-500 rounded-lg text-white font-semibold transition duration-300 ease-in-out"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
                             </>
-                            )}
+                        )}
                     </div>
                 </div>
             </div>
-                );
-                }
+
+
+        );
+}
 

@@ -13,7 +13,7 @@ use App\Entity\TimeEntry;
 
 class CalDiffPrIdCommand extends Command
 {
-    protected static $defaultName = 'app:calculateProject';
+    protected static $defaultName = 'app:calculateDifIdProject';
     protected static $defaultDescription = 'Difference between started_at and end_at';
     protected $objectManager;
 
@@ -36,13 +36,20 @@ class CalDiffPrIdCommand extends Command
         $repository = $this->objectManager->getRepository(TimeEntry::class);
 
         $timeEntries = $repository->findBy(['project'=>$project_id]);
-        $totalTime = 0;
+        $totalTime = 0; // Seconds
 
         foreach ($timeEntries as $e) {
             if ($e->getStartedAt() && $e->getEndAt()) {
                 $startTimestamp = $e->getStartedAt()->getTimestamp();
                 $endTimestamp = $e->getEndAt()->getTimestamp();
                 $totalTime += $endTimestamp - $startTimestamp;
+
+                $output->writeln(sprintf(
+                    'Дата: %s, Общее время: %.2f минут',
+                    $e->getStartedAt()->format('Y-m-d'), // Используем формат даты
+                    ($endTimestamp - $startTimestamp) / 60 // Конвертируем в минуты
+                ));
+
             } else {
                 $output->writeln(sprintf(
                     'Запись с ID %d не имеет значения started_at или end_at и будет пропущена.',
@@ -50,14 +57,14 @@ class CalDiffPrIdCommand extends Command
                 ));
             }
         }
-        $formatedTime = $totalTime / 60;
 
+        $formatedTime = round($totalTime / 60, 2); // Minutes
 
 
         // Выводим результат
         $output->writeln(sprintf(
-            'Общее время для всех записей с project_id %d составляет: %d секунд. Общее время %d минут',
-            $project_id, $totalTime, $formatedTime
+            'Общее время для всех записей с project_id %d составляет: %d секунд. Общее время %d минут.Secs- %d',
+            $project_id, $totalTime, $formatedTime, $totalTime
         ));
         return Command::SUCCESS;
     }

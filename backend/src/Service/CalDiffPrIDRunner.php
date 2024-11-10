@@ -9,7 +9,7 @@ class CalDiffPrIDRunner
 {
     public function calculateByProjectId(int $project_id): string
     {
-        $command = ['php', __DIR__.'/../../bin/console', 'app:calculateProject', (string)$project_id];
+        $command = ['php', __DIR__.'/../../bin/console', 'app:calculateDifIdProject', (string)$project_id];
         $process = new Process($command);
         $process->run();
         if (!$process->isSuccessful()) {

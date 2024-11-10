@@ -4,7 +4,7 @@ import {NavLink} from "react-router-dom";
 
 export default function Header() {
     return (
-        <header className="bg-gray-600 p-4 shadow-lg sticky top-0 z-50 absolute">
+        <header className="bg-opacity-25 backdrop-blur p-4 sticky top-0 z-50 ">
             <div className=" mx-auto flex justify-between items-center">
                 <div className="text-white text-2xl font-bold">
                     <a href="#">TimeTracker</a>

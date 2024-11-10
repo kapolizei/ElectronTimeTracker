@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import Header from "./Header";
-import axios from 'axios';
-import {formatTotalTime, easyFormatTotalTime} from "./FormatTotalTime";
-import ProjectCombobox from "./ProjectCombobox";
+import SelectProject from "./SelectProject";
 import StatisticDataPage from "./StatisticDataPage";
 
-export default function Statistic() {
+export default function StatisticPage() {
     const [fetchData, setFetchData] = useState([])
 
     //LocalStorage Project
@@ -37,23 +35,27 @@ export default function Statistic() {
 
     return (
         <>
-            <Header/>
+            <div className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 min-h-screen flex flex-col items-center justify-center pt-20">
+                <header className="fixed top-0 left-0 w-full shadow-lg py-4 z-10 text-center text-white">
+                    <Header/>
+                </header>
 
-            <div className="flex flex-col w-screen h-screen p-5">
-                {selectedProject === null ? (
-                    <div>
-                        <h3>Choose a project</h3>
-                        <ProjectCombobox onProjectSelect={handleProjectSelect}/>
-                    </div>
-                ) : (
-                    <>
-                        {fetchData ? (
-                            <StatisticDataPage fetchData={fetchData} />
-                        ) : (
-                            <p>Loading project data...</p>
-                        )}                    </>
-                )}
+                <div className="flex flex-col w-screen h-screen p-5">
+                    {selectedProject === null ? (
+                        <div>
+                            <h3>Choose a project</h3>
+                            <SelectProject onProjectSelect={handleProjectSelect}/>
+                        </div>
+                    ) : (
+                        <>
+                            {fetchData ? (
+                                <StatisticDataPage fetchData={fetchData}/>
+                            ) : (
+                                <p>Loading project data...</p>
+                            )}                    </>
+                    )}
+                </div>
             </div>
-        </>
-    );
-}
+            </>
+            );
+            }

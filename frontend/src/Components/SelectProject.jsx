@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import axios from "axios";
 
-export default function ProjectCombobox({onProjectSelect}) {
+export default function SelectProject({onProjectSelect}) {
     const [query, setQuery] = useState('')
     const [selected, setSelected] = useState(null)
     const [projects, setProjects] = useState([])

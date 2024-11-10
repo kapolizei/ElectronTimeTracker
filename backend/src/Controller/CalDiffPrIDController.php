@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Repository\ProjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,10 +13,13 @@ use App\Service\CalDiffPrIDRunner;
 class CalDiffPrIDController extends AbstractController
 {
     private $commandRunner;
+    private $entityManager;
 
-    public function __construct(CalDiffPrIDRunner $commandRunner)
+
+    public function __construct(CalDiffPrIDRunner $commandRunner, EntityManagerInterface $entityManager)
     {
         $this->commandRunner = $commandRunner;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -23,6 +28,8 @@ class CalDiffPrIDController extends AbstractController
     public function calculateByProjectId(int $project_id, ProjectRepository $projectRepository): Response
     {
         $project_title = $projectRepository->find($project_id)->getTitle();
+        $project = $projectRepository->find($project_id);
+
         try {
             $output = $this->commandRunner->calculateByProjectId($project_id);
 
@@ -40,6 +47,10 @@ class CalDiffPrIDController extends AbstractController
                         'total_time' => $minutes . ' минут',
                     ];
                 }
+
+                $project->setTotalTime($totalMinutes);
+                $this->entityManager->persist($project);
+                $this->entityManager->flush();
             } else {
                 $timeData[] = [
                     'error' => 'Не удалось извлечь время для проекта'
@@ -47,9 +58,10 @@ class CalDiffPrIDController extends AbstractController
             }
             return new JsonResponse([
                 'project_id' => $project_id,
+                'total_time' => $totalMinutes . ' минут', // Общее время
                 'project_title' => $project_title,
                 'time_data' => $timeData,
-                'total_time' => $totalMinutes . ' минут', // Общее время
+
             ]);
 
         } catch (\Exception $e) {

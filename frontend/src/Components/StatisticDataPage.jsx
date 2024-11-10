@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {easyFormatTotalTime, FormatMin, formatTotalTime} from "./FormatTotalTime";
+import StatisticAboutCard from "./StatisticAboutCard";
 
 export default function StatisticDataPage ({ fetchData }) {
     const [dataHours, setDataHours] = useState(0)
@@ -18,30 +19,7 @@ export default function StatisticDataPage ({ fetchData }) {
 
     const totalTime = fetchData["TotalTime"] || 0;
     const tasks = projectInfo["tasks"] || [];
-    const easyFormattedTime = FormatMin(totalTime)
-
-
-
-    /*useEffect(() => {
-        const getOldTime = async () => {
-            try {
-                console.log('Getting time data');
-                const response = await axios.get('http://localhost:8000/gettime.php');
-                console.log("Response:", response.data);
-                if (response.data) {
-                    const totalTime = response.data[0].hours_worked;
-                    setDataHours(totalTime);
-                    setApiData(response.data)
-                } else {
-                    console.error('No data found in response');
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        getOldTime();
-    }, []);
-*/
+    const easyFormattedTime = easyFormatTotalTime(totalTime)
 
     const data = [
         {
@@ -68,34 +46,29 @@ export default function StatisticDataPage ({ fetchData }) {
     }
 
     return (
-        <div>
+        <div className="rounded-md ">
 
-            <h1 className="text-2xl font-bold p-5">Activity reports</h1>
-            <div className="text-blue-50 w-full h-1/3  rounded-lg p-2 flex items-stretch border-2 min-w-max">
-                {/* Левый элемент */}
-                <div className="w-1/3 flex justify-center items-center text-green-500 ">
+            <h1 className="text-white text-2xl font-bold p-5">Activity reports</h1>
+            <div className="text-blue-50 w-full h-1/3  rounded-lg p-2 flex items-stretch  min-w-max">
+                <div className="w-1/3 flex justify-center items-center text-white bg-gray-700 shadow-2xl">
                     <h1>TIME: {easyFormattedTime}</h1><br/>
                 </div>
 
-                {/* Разделяющая линия */}
-                <div className="w-px bg-gray-300 mx-2"/>
+                <div className="w-px  mx-2"/>
 
-                {/* Центральный элемент */}
-                <div className="w-1/3 flex justify-center items-center text-green-500">
+                <div className="w-1/3 flex justify-center items-center text-white bg-gray-700 shadow-2xl">
                     <h1>AVG ACTIVITY 55%</h1>
                 </div>
 
-                {/* Разделяющая линия */}
-                <div className="w-px bg-gray-300 mx-2"/>
+                <div className=" bg-gray-300 mx-2"/>
 
-                {/* Правый элемент */}
-                <div className="w-1/3 flex justify-center items-center text-green-500">
+                <div className="w-1/3 flex justify-center items-center text-white bg-gray-700 shadow-2xl">
                     <p>///</p>
                 </div>
             </div>
 
-            <div className="flex flex-col items-center p-5 w-full">
-                <h1 className="text-2xl font-bold mb-5">Activity of the project '{projectTitle}'</h1>
+            <div className="flex flex-col items-center p-5 w-full bg-gray-700">
+                <h1 className="text-white text-2xl font-bold mb-5">Activity of the project '{projectTitle}'</h1>
                 <div className="w-full overflow-x-auto">
                     <div
                         className="flex justify-between items-end border-b-2 border-gray-300 h-52"
@@ -104,7 +77,7 @@ export default function StatisticDataPage ({ fetchData }) {
                         {hourstatistic.map((item, index) => (
                             <div
                                 key={index}
-                                className="relative flex flex-col items-center mx-2"
+                                className="relative flex flex-col items-center mx-2 text-white"
                                 // Устанавливаем активный индекс при наведении
                                 onMouseEnter={() => setActiveIndex(index)}
                                 onMouseLeave={() => setActiveIndex(null)}
@@ -119,7 +92,7 @@ export default function StatisticDataPage ({ fetchData }) {
 
                                 {/* Столбец графика */}
                                 <div
-                                    className="bg-blue-500 w-4 rounded-2xl hover:bg-blue-600 transition-all duration-200"
+                                    className="bg-blue-200 w-4 rounded-2xl hover:bg-blue-600 transition-all duration-200"
                                     style={{height: `${item.value * 10}px`}}
                                 ></div>
 
@@ -131,10 +104,10 @@ export default function StatisticDataPage ({ fetchData }) {
                 </div>
             </div>
 
-            <div className="container mx-auto p-5">
-                <table className="w-full table-auto border-collapse">
+            <div className="container mx-auto p-5 bg-gray-700 shadow-2xl">
+                <table className="w-full table-auto border-collapse ">
                     <thead>
-                    <tr className="bg-gray-200">
+                    <tr className="text-white border-2 border-gray-600 ">
                         <th className="px-4 py-2 text-left">Project</th>
                         <th className="px-4 py-2 text-left">Member</th>
                         <th className="px-4 py-2 text-left">To-do</th>
@@ -146,33 +119,33 @@ export default function StatisticDataPage ({ fetchData }) {
                     <tbody>
                     {data.map((day, index) => (
                         <React.Fragment key={index}>
-                            <tr className="bg-gray-100 rounded-2xl">
+                            <tr className=" rounded-2xl">
                                 <td colSpan="8" className="px-4 py-2 font-semibold">
                                     {day.date}
                                 </td>
                             </tr>
                             <tr>{projectTitle ? (
-                                <td className="px-4 py-2 text-left">{projectTitle}</td>
+                                <td className="px-4 py-2 text-left text-white">{projectTitle}</td>
                             ) : (
-                                <td className="px-4 py-2 text-left">No project title found.</td>
+                                <td className="px-4 py-2 text-left text-white">No project title found.</td>
                             )}
-                                <td className="px-4 py-2"></td>
-                                <td className="px-4 py-2"></td>
-                                <td className="px-4 py-2">{easyFormattedTime}</td>
-                                <td className="px-4 py-2">{day.total.activity}</td>
-                                <button onClick={handleShowTasks} className="bg-blue-400 px-4 py-2">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
+                                <td className="px-4 py-2 text-white"></td>
+                                <td className="px-4 py-2 text-white"></td>
+                                <td className="px-4 py-2 text-white">{easyFormattedTime}</td>
+                                <td className="px-4 py-2 text-white">{day.total.activity}</td>
+                                <button onClick={handleShowTasks} className="bg-blue-400 px-4 py-2 my-2 rounded-xl">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
 
                                 {showTasks && (
                                     <ul>
                                         {tasks.map((task) => (
-                                            <li key={task.id}>id:{task.id} | title:{task.title}</li>
+                                            <li className='text-white' key={task.id}>id:{task.id} | title:{task.title}</li>
                                         ))}
                                     </ul>
                                 )}
                             </tr>
                             {day.entries.map((entry, i) => (
-                                <tr key={i} className="border-t">
-                                    <td className="px-4 py-2">{entry.project}</td>
+                                <tr key={i} className="border-t text-white">
+                                    <td className="px-4 py-2 ">{entry.project}</td>
                                     <td className="px-4 py-2 flex items-center">
                                         <div
                                             className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold mr-2">

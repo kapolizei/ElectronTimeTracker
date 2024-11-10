@@ -1,7 +1,7 @@
 # PRIORITY
-- [ ] Symfony сделать контроллер по сохранению в [elasped_time](http://localhost/adminer.php?username=root&db=tracker&table=time_entry) значений из фронта
-- [ ] MainPage доделать сохранение в бд
-- [ ] ???elapsed_time -> totaltime?
+- [x] MainPage доделать сохранение в бд
+- [x] ???elapsed_time -> totaltime?
+- [ ] Настроить отображение в статистике проектов ( Hakaton не правилоно отображает время исправить Project->reactStatisticArray)
 -----------------
 - [ ] Why screenshoot doesnt work on ubuntu
 - [ ] Popup when screenshot taken ( сам скрин и время )
