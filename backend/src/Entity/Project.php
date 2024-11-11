@@ -149,4 +149,13 @@ class Project
         ];
     }
 
+    public function tasksArray(): array
+    {
+        return [
+            'tasks' => $this->getTasks()->map(function ($task) {
+                return $task->toArray();
+            })->toArray(),
+        ];
+    }
+
 }

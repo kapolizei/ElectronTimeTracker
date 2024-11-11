@@ -1,7 +1,9 @@
 # PRIORITY
 - [x] MainPage доделать сохранение в бд
 - [x] ???elapsed_time -> totaltime?
-- [ ] Настроить отображение в статистике проектов ( Hakaton не правилоно отображает время исправить Project->reactStatisticArray)
+- [x] Проблема с 2 контроллерами, сделать 1 общий, статистика проекта(таски айди название проекта, тайм ентри, и просчитанный тайм ентри)
+- [x] Настроить отображение в статистике проектов ( Hakaton не правилоно отображает время исправить Project->reactStatisticArray)
+- [ ] Сделать отображение статистики по дням в StatisticDataPage
 -----------------
 - [ ] Why screenshoot doesnt work on ubuntu
 - [ ] Popup when screenshot taken ( сам скрин и время )

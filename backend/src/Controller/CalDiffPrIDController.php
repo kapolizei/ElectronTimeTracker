@@ -25,7 +25,7 @@ class CalDiffPrIDController extends AbstractController
     /**
      * @Route("/api/time/project/{project_id}", name="app_api_totaltime")
      */
-    public function calculateByProjectId(int $project_id, ProjectRepository $projectRepository): Response
+    public function calculateByProjectId(EntityManagerInterface $entityManager,int $project_id, ProjectRepository $projectRepository): Response
     {
         $project_title = $projectRepository->find($project_id)->getTitle();
         $project = $projectRepository->find($project_id);
@@ -47,7 +47,7 @@ class CalDiffPrIDController extends AbstractController
                         'total_time' => $minutes . ' минут',
                     ];
                 }
-
+                $projectData = $project->tasksArray();
                 $project->setTotalTime($totalMinutes);
                 $this->entityManager->persist($project);
                 $this->entityManager->flush();
@@ -61,7 +61,7 @@ class CalDiffPrIDController extends AbstractController
                 'total_time' => $totalMinutes . ' минут', // Общее время
                 'project_title' => $project_title,
                 'time_data' => $timeData,
-
+                'projectData' => $projectData,
             ]);
 
         } catch (\Exception $e) {

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 const ProjectStatistic = () => {
+
+
     const data = [
         {
             date: "Sun, Sep 1, 2024",

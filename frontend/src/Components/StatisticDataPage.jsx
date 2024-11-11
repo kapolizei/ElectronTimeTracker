@@ -1,25 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {easyFormatTotalTime, FormatMin, formatTotalTime} from "./FormatTotalTime";
-import StatisticAboutCard from "./StatisticAboutCard";
 
-export default function StatisticDataPage ({ fetchData }) {
-    const [dataHours, setDataHours] = useState(0)
+export default function StatisticDataPage ({ fetchData, onProjectSelect }) {
     const [apiData, setApiData] = useState([]);
-    const [activeIndex, setActiveIndex] = useState(null);
-    const formattedTime = formatTotalTime(dataHours)
     const [showTasks, setShowTasks] = useState(false);
+    const wod = String(fetchData?.total_time || '');
+    const regExp = 'минут'
+    const totalTime = wod.replace(regExp, '');
+    const tasks = fetchData.projectData?.tasks || [];
+    const easyFormattedTime = FormatMin(totalTime)
+    const [activeIndex, setActiveIndex] = useState(null);
+    const projectTitle = fetchData.project_title || 'No project title available'
 
-    if (!fetchData || Object.keys(fetchData).length === 0) {
-        return <p>Loading...</p>;
-    }
-
-    const projectKey = Object.keys(fetchData)[1];
-    const projectInfo = fetchData[projectKey] || {};
-    const projectTitle = projectInfo["project title"] || "No project title available";
-
-    const totalTime = fetchData["TotalTime"] || 0;
-    const tasks = projectInfo["tasks"] || [];
-    const easyFormattedTime = easyFormatTotalTime(totalTime)
 
     const data = [
         {
@@ -36,7 +28,9 @@ export default function StatisticDataPage ({ fetchData }) {
         },
     ];
 
-    const hourstatistic = [
+    const hoursStatisticDate = fetchData.time_data
+    console.log(hoursStatisticDate)
+    const hoursStatistic = [
         {date: "Sep 01", value: 2},
         {date: "Sep 02", value: 4},
     ];
@@ -47,7 +41,6 @@ export default function StatisticDataPage ({ fetchData }) {
 
     return (
         <div className="rounded-md ">
-
             <h1 className="text-white text-2xl font-bold p-5">Activity reports</h1>
             <div className="text-blue-50 w-full h-1/3  rounded-lg p-2 flex items-stretch  min-w-max">
                 <div className="w-1/3 flex justify-center items-center text-white bg-gray-700 shadow-2xl">
@@ -74,7 +67,7 @@ export default function StatisticDataPage ({ fetchData }) {
                         className="flex justify-between items-end border-b-2 border-gray-300 h-52"
                         style={{minWidth: "1000px"}}
                     >
-                        {hourstatistic.map((item, index) => (
+                        {hoursStatistic.map((item, index) => (
                             <div
                                 key={index}
                                 className="relative flex flex-col items-center mx-2 text-white"
@@ -135,14 +128,17 @@ export default function StatisticDataPage ({ fetchData }) {
                                 <td className="px-4 py-2 text-white">{day.total.activity}</td>
                                 <button onClick={handleShowTasks} className="bg-blue-400 px-4 py-2 my-2 rounded-xl">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
 
-                                {showTasks && (
+                                {showTasks && tasks.length > 0 ? (
                                     <ul>
                                         {tasks.map((task) => (
-                                            <li className='text-white' key={task.id}>id:{task.id} | title:{task.title}</li>
+                                            <li className="text-white" key={task.id}>
+                                                id: {task.id} | title: {task.title}
+                                            </li>
                                         ))}
                                     </ul>
-                                )}
+                                ) : showTasks && <p className="text-white">No tasks available.</p>}
                             </tr>
+
                             {day.entries.map((entry, i) => (
                                 <tr key={i} className="border-t text-white">
                                     <td className="px-4 py-2 ">{entry.project}</td>

@@ -20,7 +20,7 @@ export default function StatisticPage() {
         if (selectedProject) {
             const fetchStatistics = async () => {
                 try {
-                    const response = await fetch(`https://localhost:8000/api/project/${selectedProject}/statistic`);
+                    const response = await fetch(`https://localhost:8000/api/time/project/${selectedProject}`);
                     const data = await response.json();
                     setFetchData(data);
                     console.log("data:",data)
