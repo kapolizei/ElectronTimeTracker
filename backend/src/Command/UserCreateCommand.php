@@ -13,16 +13,17 @@ use App\Entity\User;
 
 class UserCreateCommand extends Command
 {
-    protected static $defaultName = 'app:test';
-    protected static $defaultDescription = 'Add a short description for your command';
+    protected static $defaultName = 'create:user';
+    protected static $defaultDescription = 'Create a new user';
     protected $objectManager;
 
 
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description');
+            ->addArgument('username', InputArgument::REQUIRED, 'Username')
+            ->addArgument('password', InputArgument::REQUIRED, 'Password')
+            ->addArgument('email', InputArgument::REQUIRED, 'Email');
     }
 
     public function __construct(EntityManagerInterface $objectManager)
@@ -33,17 +34,18 @@ class UserCreateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $password = $input->getArgument('password');
+        $hash = md5($password);
         $user = new User();
-       $user
-       ->setLogin('test3')
-            ->setEmail('test3@test.com')
-            ->setPasswordHash(md5('test'));
+        $user
+       ->setLogin($login = $input->getArgument('username'))
+            ->setPasswordHash(md5($hash))
+            ->setEmail($email = $input->getArgument('email'));
 
         $this->objectManager->persist($user);
         $this->objectManager->flush();
 
-        $user = $this->objectManager->getRepository(User::class)->findBy(['login' => 'test']);
-        $output->writeln('This is a test command output!');
+        $output->writeln(sprintf('Created user: Login:<info>%s</info>, Password:<info>%s</info>,  Email:<info>%s</info>.', $login, $hash, $email));
 
         return Command::SUCCESS;
     }

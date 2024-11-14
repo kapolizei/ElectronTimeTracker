@@ -28,16 +28,16 @@ export default function StatisticDataPage ({ fetchData, onProjectSelect }) {
         },
     ];
 
-    const hoursStatisticDate = fetchData.time_data
-    console.log(hoursStatisticDate)
-    const hoursStatistic = [
-        {date: "Sep 01", value: 2},
-        {date: "Sep 02", value: 4},
-    ];
-
     const handleShowTasks = () => {
         setShowTasks(!showTasks);
     }
+
+    const hoursStatistic = fetchData?.time_data
+        ? Object.values(fetchData.time_data).map((item, index) => ({
+            date: item.date,
+            value: parseFloat(item.total_time),
+        }))
+        : [];
 
     return (
         <div className="rounded-md ">
@@ -71,7 +71,6 @@ export default function StatisticDataPage ({ fetchData, onProjectSelect }) {
                             <div
                                 key={index}
                                 className="relative flex flex-col items-center mx-2 text-white"
-                                // Устанавливаем активный индекс при наведении
                                 onMouseEnter={() => setActiveIndex(index)}
                                 onMouseLeave={() => setActiveIndex(null)}
                             >
@@ -79,14 +78,14 @@ export default function StatisticDataPage ({ fetchData, onProjectSelect }) {
                                 {activeIndex === index && (
                                     <div
                                         className="absolute bottom-full mb-1 px-2 py-1 bg-gray-700 text-white text-xs rounded-md">
-                                        {item.value}
+                                        {item.value} min
                                     </div>
                                 )}
 
                                 {/* Столбец графика */}
                                 <div
                                     className="bg-blue-200 w-4 rounded-2xl hover:bg-blue-600 transition-all duration-200"
-                                    style={{height: `${item.value * 10}px`}}
+                                    style={{height: `${item.value * 2}px`}}
                                 ></div>
 
                                 {/* Подпись под столбцом */}
@@ -126,7 +125,8 @@ export default function StatisticDataPage ({ fetchData, onProjectSelect }) {
                                 <td className="px-4 py-2 text-white"></td>
                                 <td className="px-4 py-2 text-white">{easyFormattedTime}</td>
                                 <td className="px-4 py-2 text-white">{day.total.activity}</td>
-                                <button onClick={handleShowTasks} className="bg-blue-400 px-4 py-2 my-2 rounded-xl">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
+                                <button onClick={handleShowTasks}
+                                        className="bg-blue-400 px-4 py-2 my-2 rounded-xl">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
 
                                 {showTasks && tasks.length > 0 ? (
                                     <ul>
