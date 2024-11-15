@@ -6,11 +6,16 @@ import axios from "axios";
 
 export default function ActionButton(props) {
     let [isOpen, setIsOpen] = useState(false);
+    let [isAddProject, setIsAddProject] = useState(false)
     const inputRef = useRef(null)
 
     const [selectedProject, setSelectedProject] = useState(() => {
         return localStorage.getItem('selectedProject') || null;
     });
+
+    function handleProjectCreate () {
+        setIsAddProject(true)
+    }
 
 
     function handleEdit() {
@@ -19,18 +24,28 @@ export default function ActionButton(props) {
 
     async function handleSubmit() {
         const editValue = inputRef.current.value;
-        if (isNaN(editValue) || editValue <= 0) {
+        if (editValue <= 0) {
             alert("Пожалуйста, введите корректное количество часов.");
             return;
         }
-
         try {
-            const response = await axios.post("http://localhost:8000/edititem.php", {
-                hours_worked: editValue
-            });
-            console.log(response.data);
-            console.log("editValue:",editValue);
-            setIsOpen(false);
+            if(isOpen) {
+                const response = await axios.post("https://localhost:8000/edititem.php", {
+                    hours_worked: editValue
+                });
+                console.log(response.data);
+                console.log("editValue:",editValue);
+                setIsOpen(false);
+            } else if (isAddProject) {
+                const response = await axios.post("https://localhost:8000/api/new_project", {
+                    title: editValue
+                });
+                console.log(response.data);
+                console.log("project_title:", editValue);
+                setIsAddProject(false);
+            } else {
+                alert("Пожалуйста, выберите действие.");
+            }
         } catch (error) {
             console.error("Ошибка при редактировании:", error);
         }
@@ -76,7 +91,7 @@ export default function ActionButton(props) {
                     <div className="my-1 h-px bg-white/5" />
 
                     <MenuItem>
-                        <button
+                        <button onClick={handleProjectCreate}
                             className=" group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                             <ArchiveBoxXMarkIcon className=" size-4 fill-white/30"/>
                             Add project
@@ -110,7 +125,7 @@ export default function ActionButton(props) {
                 </MenuItems>
             </Menu>
 
-            <Dialog open={isOpen} as="div" className="relative z-10 focus:outline-none" onClose={() => setIsOpen(false)}>
+            <Dialog open={isOpen || isAddProject} as="div" className="relative z-10 focus:outline-none" onClose={() => setIsOpen(false)}>
                 <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div className="flex min-h-full items-center justify-center p-4">
                         <DialogPanel
@@ -118,10 +133,10 @@ export default function ActionButton(props) {
                             className="w-full max-w-md rounded-xl bg-gray-600 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
                         >
                             <DialogTitle as="h3" className="text-base/7 font-medium text-white">
-                                Edit Total Hours
+                                {isOpen ? 'Edit Total Hours' : 'Add new Project'}
                             </DialogTitle>
                             <p className="mt-2 text-sm/6 text-white/50">
-                                <input ref={inputRef} className='rounded bg-gray-800' placeholder="Edit"/>
+                                <input ref={inputRef} className='rounded bg-gray-800' placeholder={isOpen ? 'Edit' : 'New Project Name'}/>
                             </p>
                             <div className="mt-4">
                                 <Button
