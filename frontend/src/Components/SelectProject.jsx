@@ -13,7 +13,9 @@ export default function SelectProject({onProjectSelect}) {
     useEffect(() => {
         async function fetchProjects() {
             try {
-                const response = await axios.get("https://localhost:8000/api/project")
+                const response = await axios.get(`${process.env.REACT_APP_API_PATH}/project`,
+                    {headers: {'Authorization': process.env.REACT_APP_ACCESS_TOKEN}}
+                )
                 const data = response.data.projects
                 setProjects(data)
                 console.log('Projects:',data)
