@@ -1,6 +1,7 @@
 import '../App.css';
 
 import {NavLink} from "react-router-dom";
+import AccountButton from "./AccountButton";
 
 export default function Header() {
     return (
@@ -15,18 +16,33 @@ export default function Header() {
                             <NavLink className="text-white hover:text-blue-500 transition-all"
                                      to={'/statistic'}>Statistic</NavLink>
                         </li>
+
                         <li>
                             <NavLink className="text-white hover:text-blue-500 transition-all" to={'/screen'}>Screenshot
                                 test</NavLink>
                         </li>
+
                         <li>
-                            <NavLink className="text-white hover:text-blue-500 transition-all" to={'/reg'}>Registration</NavLink>
+                            <NavLink className="text-white hover:text-blue-500 transition-all"
+                                     to={'/reg'}>Registration</NavLink>
+                        </li>
+
+                        <li>
+                            <NavLink className="text-white hover:text-blue-500 transition-all"
+                                     to={'/account'}>
+                                <AccountButton/>
+                            </NavLink>
+                        </li>
+
+
+
+
+
+                        <li>
+                            <a href="#" className="text-gray-600 transition-all disabled pointer-events-none">Services</a>
                         </li>
                         <li>
-                            <a href="#" className="text-white transition-all disabled pointer-events-none">Services</a>
-                        </li>
-                        <li>
-                            <a href="#" className="text-white disabled pointer-events-none">Contact</a>
+                            <a href="#" className="text-gray-600 disabled pointer-events-none">Contact</a>
                         </li>
                     </ul>
 

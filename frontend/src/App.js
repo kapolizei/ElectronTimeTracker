@@ -6,6 +6,7 @@ import Test from "./Components/Test";
 import StatisticPage from "./Components/StatisticPage";
 import SelectProject from "./Components/SelectProject";
 import Registration from "./Components/Registration";
+import Account from "./Components/Account";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/screen" element={<Test />} />
                     <Route path="/api" element={<SelectProject />} />
                     <Route path="/reg" element={<Registration />} />
+                    <Route path="/account" element={<Account />} />
                 </Routes>
             </BrowserRouter>
 

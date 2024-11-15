@@ -41,12 +41,20 @@ const Test = () => {
     };
 
     return (
-        <div>
-             <Header/>
-            <button onClick={handleTakeScreenshot}>Сделать скриншот</button>
-            <div>{message}</div>
-        </div>
-    );
+        <>
+            <header
+                className="fixed top-0 left-0 w-full bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 shadow-lg py-4 z-10 text-center text-white">
+                <Header/>
+            </header>
+            <div className='pt-28'>
+
+                <button onClick={handleTakeScreenshot}>Сделать скриншот</button>
+                <div>{message}</div>
+            </div>
+        </>
+
+    )
+        ;
 };
 
 export default Test;
