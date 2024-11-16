@@ -26,7 +26,6 @@ class CalDiffPrIDController extends AbstractController
      */
     public function calculateByProjectId(EntityManagerInterface $entityManager,int $project_id, ProjectRepository $projectRepository): Response
     {
-        $project_title = $projectRepository->find($project_id)->getTitle();
         $project = $projectRepository->find($project_id);
 
         try {
@@ -58,7 +57,7 @@ class CalDiffPrIDController extends AbstractController
             return new JsonResponse([
                 'project_id' => $project_id,
                 'total_time' => $totalMinutes . ' минут', // Общее время
-                'project_title' => $project_title,
+                'project_title' => $project->getTitle(),
                 'time_data' => $timeData,
                 'projectData' => $projectData,
             ]);

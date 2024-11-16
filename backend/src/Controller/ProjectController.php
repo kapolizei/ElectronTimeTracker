@@ -2,9 +2,7 @@
 namespace App\Controller;
 use App\Entity\Project;
 
-use App\Entity\User;
-use App\Repository\ProjectRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\Access;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +13,11 @@ class ProjectController extends AbstractController
     /**
      * @Route("/api/project", name="app_api_project")
      */
-    public function index(ProjectRepository $projectRepository): Response
+    public function index(Access $access): Response
     {
-        $projects = $projectRepository->findAll();
+        $user = $access->validateUserRequest();
+
+        $projects = $user->getProjects()->toArray();
 
         $projectsArray = array_map(function (Project $project) {
             return $project->toArray();

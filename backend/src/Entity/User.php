@@ -44,10 +44,16 @@ class User
      */
     private $timeEntries;
 
+    /**
+     * @ORM\OneToMany(targetEntity=AccessToken::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $accessTokens;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->timeEntries = new ArrayCollection();
+        $this->accessTokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +157,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($timeEntry->getUser() === $this) {
                 $timeEntry->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AccessToken>
+     */
+    public function getAccessTokens(): Collection
+    {
+        return $this->accessTokens;
+    }
+
+    public function addAccessToken(AccessToken $accessToken): self
+    {
+        if (!$this->accessTokens->contains($accessToken)) {
+            $this->accessTokens[] = $accessToken;
+            $accessToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessToken(AccessToken $accessToken): self
+    {
+        if ($this->accessTokens->removeElement($accessToken)) {
+            // set the owning side to null (unless already changed)
+            if ($accessToken->getUser() === $this) {
+                $accessToken->setUser(null);
             }
         }
 
