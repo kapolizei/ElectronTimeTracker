@@ -23,3 +23,10 @@ export const easyFormatTotalTime = (totalSeconds) => {
 
          return `${hours} hours ${remainingMinutes} minutes ${seconds} seconds`;
  }
+
+ export const format = (totalTime) => {
+         const totalMinutes = parseFloat(totalTime.replace(" минут", ""));
+         const hours = Math.floor(totalMinutes / 60);
+         const minutes = Math.round(totalMinutes % 60);
+         return `${hours} ч ${minutes} мин`;
+ };

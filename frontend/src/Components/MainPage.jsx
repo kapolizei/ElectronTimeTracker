@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import ActionButton from "./ActionButton";
 import SelectProject from "./SelectProject";
-import {FormatMin} from "./FormatTotalTime";
+import {format} from "./FormatTotalTime";
 
 
 export default function MainPage() {
     const [isRunning, setIsRunning] = useState(false);
-    const [elapsedTime, setElapsedTime] = useState(0);
     const [timerId, setTimerId] = useState(null);
     const [isPaused, setIsPaused] = useState(false);
     const [actionShow, setIsActionShow] = useState(false);
@@ -23,12 +22,21 @@ export default function MainPage() {
     const [selectedProject, setSelectedProject] = useState(() => {
         return localStorage.getItem('selectedProject') || null;
     });
+    //LocalStorage ElapsedTime
+    const [elapsedTime, setElapsedTime] = useState(() => {
+        const savedTime = localStorage.getItem('elapsedTime');
+        return savedTime ? parseInt(savedTime, 10) || 0 : 0;
+    });
 
     const handleProjectSelect = (projectId) => {
         setSelectedProject(projectId);
         localStorage.setItem("selectedProject", projectId)
         console.log("selected", selectedProject, projectId)
     };
+
+    console.log(elapsedTime, 'elapsed time')
+
+
 
     const LazyLoad = () => {
             const [isVisible, setIsVisible] = useState(false);
@@ -40,7 +48,7 @@ export default function MainPage() {
             }, []);
             return (
                 <div className=''>
-                    {isVisible ? <span>{FormatMin(totalTime)}</span> : <span>Loading...</span>}
+                    {isVisible ? <span>{format(totalTime)}</span> : <span>Loading...</span>}
                     <div className="justify-center items-center">Project Name: {projectTitle}</div>
                 </div>
             );
@@ -54,6 +62,10 @@ export default function MainPage() {
             localStorage.removeItem('selectedProject');
         }
     }, [selectedProject]);
+
+    useEffect(() => {
+         localStorage.setItem('elapsedTime', elapsedTime);
+    }, [elapsedTime]);
 
     useEffect(() => {
         if (selectedProject) {
@@ -78,7 +90,6 @@ export default function MainPage() {
             const now = new Date();
             setStartTime(now);
             console.log('Timer Started At :', now);
-
 
             const timerId = setInterval(() => {
                 setElapsedTime(prevTime => prevTime + 1);
@@ -122,6 +133,7 @@ export default function MainPage() {
                 setStartTime(null)
                 setEndTime(null)
                 setElapsedTime(0)
+                localStorage.setItem('elapsedTime', 0);
                 setTimerId(null)
             }
         }
@@ -199,12 +211,7 @@ export default function MainPage() {
                                         <p className="text-gray-300 font-medium mb-2">
                                             <LazyLoad/>
                                         </p>
-                                        <button
-                                            onClick={handleDelete}
-                                            className="py-2 px-6 mt-3 bg-red-600 hover:bg-red-500 rounded-lg text-white font-semibold transition duration-300 ease-in-out"
-                                        >
-                                            Delete
-                                        </button>
+
                                     </div>
                                 </div>
                             </>

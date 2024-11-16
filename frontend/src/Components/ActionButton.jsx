@@ -4,7 +4,7 @@ import {useState, useRef } from "react";
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import axios from "axios";
 
-export default function ActionButton(props) {
+export default function ActionButton() {
     let [isOpen, setIsOpen] = useState(false);
     let [isAddProject, setIsAddProject] = useState(false)
     const inputRef = useRef(null)
@@ -43,6 +43,7 @@ export default function ActionButton(props) {
                 console.log(response.data);
                 console.log("project_title:", editValue);
                 setIsAddProject(false);
+                setIsOpen(false)
             } else {
                 alert("Пожалуйста, выберите действие.");
             }
@@ -125,7 +126,15 @@ export default function ActionButton(props) {
                 </MenuItems>
             </Menu>
 
-            <Dialog open={isOpen || isAddProject} as="div" className="relative z-10 focus:outline-none" onClose={() => setIsOpen(false)}>
+            <Dialog
+                open={isOpen || isAddProject}
+                as="div"
+                className="relative z-10 focus:outline-none"
+                onClose={() => {
+                    setIsOpen(false);
+                    setIsAddProject(false);
+                }}
+            >
                 <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div className="flex min-h-full items-center justify-center p-4">
                         <DialogPanel
