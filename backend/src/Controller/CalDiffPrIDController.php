@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\ProjectRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +29,10 @@ class CalDiffPrIDController extends AbstractController
     public function calculateByProjectId(EntityManagerInterface $entityManager,int $project_id, ProjectRepository $projectRepository): Response
     {
         $project = $projectRepository->find($project_id);
+
+        $user = $entityManager->getRepository(User::class)->find($project_id);
+        $login = $user->getLogin();
+
 
         try {
             $output = $this->commandRunner->calculateByProjectId($project_id);
@@ -56,6 +62,7 @@ class CalDiffPrIDController extends AbstractController
             }
             return new JsonResponse([
                 'project_id' => $project_id,
+                'user' => $login,
                 'total_time' => $totalMinutes . ' минут', // Общее время
                 'project_title' => $project->getTitle(),
                 'time_data' => $timeData,

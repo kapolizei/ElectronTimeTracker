@@ -17,6 +17,7 @@ export default function MainPage() {
     const [fetchData, setFetchData] = useState([])
     const totalTime = fetchData["total_time"] || 0;
     const projectTitle = fetchData['project_title'];
+    const projectUser = fetchData['user'];
 
     //LocalStorage Project
     const [selectedProject, setSelectedProject] = useState(() => {
@@ -50,6 +51,7 @@ export default function MainPage() {
             <div className=''>
                 {isVisible ? <span>{format(totalTime)}</span> : <span>Loading...</span>}
                 <div className="justify-center items-center">Project Name: {projectTitle}</div>
+                <div className="justify-center items-center">{projectUser}</div>
             </div>
         );
     };
