@@ -93,7 +93,7 @@ export default function ActionButton() {
 
                     <MenuItem>
                         <button onClick={handleProjectCreate}
-                            className=" group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                                className=" group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                             <ArchiveBoxXMarkIcon className=" size-4 fill-white/30"/>
                             Add project
                         </button>
