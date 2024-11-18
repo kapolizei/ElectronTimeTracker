@@ -2,11 +2,11 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import {Routes, Route, BrowserRouter} from "react-router-dom";
 import MainPage from "./Components/MainPage";
-import Test from "./Components/Test";
+import Test from "./Components/dev/Test";
 import StatisticPage from "./Components/StatisticPage";
 import SelectProject from "./Components/SelectProject";
 import Registration from "./Components/Registration";
-import Account from "./Components/Account";
+import Account from "./Components/dev/Account";
 
 function App() {
     return (

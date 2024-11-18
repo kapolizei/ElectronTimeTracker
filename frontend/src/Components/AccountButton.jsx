@@ -1,7 +1,10 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useSelector } from "react-redux";
 
 export default function AccountButton() {
+    const data = useSelector((state)=> state.data)
+    const username = data.user
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -17,7 +20,7 @@ export default function AccountButton() {
             >
                 <div className="px-4 py-3">
                     <p className="text-sm">Signed in as</p>
-                    <p className="truncate text-sm font-medium text-gray-900">tom@example.com</p>
+                    <p className="truncate text-sm font-medium text-gray-900">{username}</p>
                 </div>
                 <div className="py-1">
                     <MenuItem>

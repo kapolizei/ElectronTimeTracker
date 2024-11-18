@@ -1,5 +1,4 @@
 import '../App.css';
-
 import {NavLink} from "react-router-dom";
 import AccountButton from "./AccountButton";
 
@@ -33,11 +32,6 @@ export default function Header() {
                                 <AccountButton/>
                             </NavLink>
                         </li>
-
-
-
-
-
                         <li>
                             <a href="#" className="text-gray-600 transition-all disabled pointer-events-none">Services</a>
                         </li>

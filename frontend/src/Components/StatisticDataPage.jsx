@@ -1,7 +1,10 @@
 import React, {useState} from "react";
 import {easyFormatTotalTime, FormatMin, formatTotalTime} from "./FormatTotalTime";
+import { useSelector } from "react-redux";
 
-export default function StatisticDataPage ({ fetchData, onProjectSelect }) {
+export default function StatisticDataPage () {
+    const fetchData = useSelector((state)=> state.data);
+
     const [apiData, setApiData] = useState([]);
     const [showTasks, setShowTasks] = useState(false);
     const wod = String(fetchData?.total_time || '');
@@ -11,7 +14,6 @@ export default function StatisticDataPage ({ fetchData, onProjectSelect }) {
     const easyFormattedTime = FormatMin(totalTime)
     const [activeIndex, setActiveIndex] = useState(null);
     const projectTitle = fetchData.project_title || 'No project title available'
-
 
     const data = [
         {

@@ -4,20 +4,22 @@ import Header from "./Header";
 import ActionButton from "./ActionButton";
 import SelectProject from "./SelectProject";
 import {format} from "./FormatTotalTime";
-
+import {useDispatch} from "react-redux";
+import {setData} from "../state/store";
+import {useSelector} from "react-redux";
 
 export default function MainPage() {
+    const data = useSelector((state)=> state.data)
     const [isRunning, setIsRunning] = useState(false);
     const [timerId, setTimerId] = useState(null);
     const [isPaused, setIsPaused] = useState(false);
-    const [actionShow, setIsActionShow] = useState(false);
-    const [totalSavedTime, setTotalSavedTime] = useState(0); // Состояние для общего времени
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
     const [fetchData, setFetchData] = useState([])
-    const totalTime = fetchData["total_time"] || 0;
-    const projectTitle = fetchData['project_title'];
-    const projectUser = fetchData['user'];
+    const totalTime = data["total_time"] || 0;
+    const projectTitle = data['project_title'] || "Loading...";
+    const projectUser = data['user'] || "Loading...";
+    const dispatch = useDispatch();
 
     //LocalStorage Project
     const [selectedProject, setSelectedProject] = useState(() => {
@@ -34,10 +36,6 @@ export default function MainPage() {
         localStorage.setItem("selectedProject", projectId)
         console.log("selected", selectedProject, projectId)
     };
-
-    console.log(elapsedTime, 'elapsed time')
-
-
 
     const LazyLoad = () => {
         const [isVisible, setIsVisible] = useState(false);
@@ -56,7 +54,7 @@ export default function MainPage() {
         );
     };
 
-
+///Project select useEffect
     useEffect(() => {
         if (selectedProject !== null) {
             localStorage.setItem('selectedProject', selectedProject);
@@ -64,7 +62,6 @@ export default function MainPage() {
             localStorage.removeItem('selectedProject');
         }
     }, [selectedProject]);
-
     useEffect(() => {
         localStorage.setItem('elapsedTime', elapsedTime);
     }, [elapsedTime]);
@@ -74,9 +71,10 @@ export default function MainPage() {
             const fetchStatistics = async () => {
                 try {
                     const response = await fetch(`https://localhost:8000/api/time/project/${selectedProject}`);
-                    const data = await response.json();
-                    setFetchData(data);
-                    console.log("data:",data)
+                    const apiData = await response.json();
+                    dispatch(setData(apiData));
+                    setFetchData(apiData);
+                    console.log("data:",apiData)
                 } catch (error) {
                     console.error('Ошибка загрузки данных:', error);
                 }
@@ -88,7 +86,6 @@ export default function MainPage() {
 
     function handleClick() {
         setIsRunning(true);
-        setIsActionShow(true);
         const now = new Date();
         setStartTime(now);
         console.log('Timer Started At :', now);
@@ -122,10 +119,8 @@ export default function MainPage() {
         if (isRunning || isPaused) {
             clearInterval(timerId)
             setIsRunning(false)
-
             const now = new Date();
             setEndTime(now)
-
             const startedAt = formatDate(startTime);
             const endAt = formatDate(now)
             const task_id = 1;
@@ -142,7 +137,6 @@ export default function MainPage() {
 
     const saveToDatabase = (startedAt, endAt, elapsedSeconds, task_id,selectedProject) => {
         console.log("Перед сохранением:", { startedAt, endAt, elapsedSeconds });
-
         fetch('https://localhost:8000/api/save_time_entry', {
             method: 'POST',
             headers: {
@@ -159,11 +153,6 @@ export default function MainPage() {
             .then(response => response.json())
             .then(data => console.log("Ответ сервера:", data))
             .catch(error => console.error("Ошибка сохранения:", error));
-    };
-
-    const handleDelete = async (numberToSave) => {
-        setTotalSavedTime(0)
-        setElapsedTime(0)
     };
 
     //Для отрисовки счетчика при запуске//

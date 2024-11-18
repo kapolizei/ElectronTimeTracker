@@ -1,6 +1,6 @@
 // src/Components/ScreenshotButton.jsx
 import React, { useEffect, useState } from 'react';
-import Header from "./Header";
+import Header from "../Header";
 
 const Test = () => {
     const [message, setMessage] = useState('');
