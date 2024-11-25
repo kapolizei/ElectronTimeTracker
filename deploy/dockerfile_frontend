@@ -1,0 +1,20 @@
+FROM node:23
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем файлы зависимостей
+COPY ../package.json /app
+COPY ../package-lock.json /app
+
+# Устанавливаем зависимости проекта
+RUN npm install
+
+# Копируем все файлы приложения в контейнер
+COPY .. /app
+
+# Открываем порт 3000 для работы React
+EXPOSE 3000
+
+# Запускаем React приложение
+CMD ["npm", "start"]

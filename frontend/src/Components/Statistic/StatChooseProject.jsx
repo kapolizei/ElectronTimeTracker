@@ -4,8 +4,6 @@ import SelectProject from "../SelectProject";
 import StatMainPage from "./StatMainPage";
 
 export default function StatChooseProject() {
-    const [fetchData, setFetchData] = useState([])
-
     //LocalStorage Project
     const [selectedProject, setSelectedProject] = useState(() => {
         return localStorage.getItem('selectedProject') || null;
@@ -16,14 +14,14 @@ export default function StatChooseProject() {
         console.log("selected", selectedProject, projectId)
     };
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (selectedProject) {
             const fetchStatistics = async () => {
                 try {
                     const response = await fetch(`https://localhost:8000/api/time/project/${selectedProject}`);
                     const data = await response.json();
                     setFetchData(data);
-                    console.log("data:",data)
+                    console.log(data)
                 } catch (error) {
                     console.error('Ошибка загрузки данных:', error);
                 }
@@ -31,7 +29,7 @@ export default function StatChooseProject() {
 
             fetchStatistics();
         }
-    }, [selectedProject]);
+    }, [selectedProject]);*/
 
     return (
         <>
@@ -48,11 +46,8 @@ export default function StatChooseProject() {
                         </div>
                     ) : (
                         <>
-                            {fetchData ? (
-                                <StatMainPage fetchData={fetchData}/>
-                            ) : (
-                                <p>Loading project data...</p>
-                            )}                    </>
+                            <StatMainPage />
+                        </>
                     )}
                 </div>
             </div>

@@ -5,32 +5,15 @@ import StatActivity from "./StatActivity";
 
 export default function StatMainPage () {
     const fetchData = useSelector((state)=> state.data);
-
+    const projectTitle = useSelector(state => state.project_title);
+    const wod = String(useSelector(state => state.total_time))
+    const tasks = useSelector(state => state.projectData.tasks)
     const [apiData, setApiData] = useState([]);
     const [showTasks, setShowTasks] = useState(false);
-    const wod = String(fetchData?.total_time || '');
     const regExp = 'минут'
     const totalTime = wod.replace(regExp, '');
-    /*const tasks = fetchData.projectData?.tasks || [];*/
-    const [tasks, setTasks] = useState(null)
     const easyFormattedTime = FormatMin(totalTime)
     const [activeIndex, setActiveIndex] = useState(null);
-/*
-    const projectTitle = fetchData.project_title || 'Loading...'
-*/
-
-    const [projectTitle, setProjectTitle] = useState(() => {
-        return localStorage.getItem('project_title') || 'Loading';
-    });
-
-    useEffect(() => {
-        if (fetchData) {
-            setProjectTitle(fetchData.project_title);
-            localStorage.setItem('project_title', fetchData.project_title);
-
-            setTasks(fetchData.projectData?.tasks)
-        }
-    }, [fetchData?.project_title]);
 
     const data = [
         {
@@ -131,7 +114,7 @@ export default function StatMainPage () {
                                 <td className="px-4 py-2 text-white">{day.total.activity}</td>
                                 <button onClick={handleShowTasks} className="bg-blue-400 px-4 py-2 my-2 rounded-xl">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
 
-                                {showTasks && tasks.length > 0 ? (
+                                {showTasks ? (
                                     <ul>
                                         {tasks.map((task) => (
                                             <li className="text-white" key={task.id}>

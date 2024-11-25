@@ -53,8 +53,7 @@ export default function MainPage() {
                     const response = await fetch(`https://localhost:8000/api/time/project/${selectedProject}`);
                     const apiData = await response.json();
                     dispatch(setData(apiData));
-                    setFetchData(apiData);
-                    console.log("data:",apiData)
+                    console.log(apiData)
                 } catch (error) {
                     console.error('Ошибка загрузки данных:', error);
                 }

@@ -5,10 +5,10 @@ import {easyFormatTotalTime, FormatMin} from "../Functions/FormatTotalTime";
 
 export default function StatActivity() {
     //Redux State
-    const fetchData = useSelector((state)=> state.data);
+    const total_time = useSelector(state => state.total_time)
 
     const stats = [
-        { name: 'Total Time', stat: '54' },
+        { name: 'Total Time', stat: total_time },
         { name: 'Avg. Open Rate', stat: '58.16%' },
         { name: 'Avg. Click Rate', stat: '24.57%' },
     ]
