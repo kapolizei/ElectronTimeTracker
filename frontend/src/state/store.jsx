@@ -1,26 +1,30 @@
-import {configureStore, createSlice} from "@reduxjs/toolkit";
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const apiDataSlice = createSlice({
-    name: 'data',
+    name: "data",
     initialState: [],
     reducers: {
-        setData: (state, action) => action.payload
-    }
-})
+        setData: (state, action) => action.payload,
+    },
+});
 
-const counterSlice = createSlice({
-    name: 'data',
-    initialState: [],
-    reducers: {
-        setData: (state, action) => action.payload
-    }
-})
-export const {setData} = apiDataSlice.actions;
+const persistConfig = {
+    key: "root",
+    storage,
+};
+
+const persistedReducer = persistReducer(
+    persistConfig,
+    apiDataSlice.reducer
+);
 
 const store = configureStore({
-    reducer:{
-        data: counterSlice.reducer
-    }
-})
+    reducer: persistedReducer,
+});
 
-export default store
+const persistor = persistStore(store);
+
+export const { setData } = apiDataSlice.actions;
+export { store, persistor };

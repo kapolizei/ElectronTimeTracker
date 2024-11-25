@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import Header from "./Header";
-import SelectProject from "./SelectProject";
-import StatisticDataPage from "./StatisticDataPage";
+import Header from "../Header";
+import SelectProject from "../SelectProject";
+import StatMainPage from "./StatMainPage";
 
-export default function StatisticPage() {
+export default function StatChooseProject() {
     const [fetchData, setFetchData] = useState([])
 
     //LocalStorage Project
@@ -49,7 +49,7 @@ export default function StatisticPage() {
                     ) : (
                         <>
                             {fetchData ? (
-                                <StatisticDataPage fetchData={fetchData}/>
+                                <StatMainPage fetchData={fetchData}/>
                             ) : (
                                 <p>Loading project data...</p>
                             )}                    </>

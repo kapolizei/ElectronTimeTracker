@@ -3,28 +3,25 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import ActionButton from "./ActionButton";
 import SelectProject from "./SelectProject";
-import {format} from "./FormatTotalTime";
 import {useDispatch} from "react-redux";
 import {setData} from "../state/store";
-import {useSelector} from "react-redux";
+import {LazyLoad} from "./LazyLoad";
 
 export default function MainPage() {
-    const data = useSelector((state)=> state.data)
     const [isRunning, setIsRunning] = useState(false);
     const [timerId, setTimerId] = useState(null);
     const [isPaused, setIsPaused] = useState(false);
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
     const [fetchData, setFetchData] = useState([])
-    const totalTime = data["total_time"] || 0;
-    const projectTitle = data['project_title'] || "Loading...";
-    const projectUser = data['user'] || "Loading...";
+
     const dispatch = useDispatch();
 
     //LocalStorage Project
     const [selectedProject, setSelectedProject] = useState(() => {
         return localStorage.getItem('selectedProject') || null;
     });
+
     //LocalStorage ElapsedTime
     const [elapsedTime, setElapsedTime] = useState(() => {
         const savedTime = localStorage.getItem('elapsedTime');
@@ -35,23 +32,6 @@ export default function MainPage() {
         setSelectedProject(projectId);
         localStorage.setItem("selectedProject", projectId)
         console.log("selected", selectedProject, projectId)
-    };
-
-    const LazyLoad = () => {
-        const [isVisible, setIsVisible] = useState(false);
-        useEffect(() => {
-            const timer = setTimeout(() => {
-                setIsVisible(true);
-            }, 1000);
-            return () => clearTimeout(timer);
-        }, []);
-        return (
-            <div className=''>
-                {isVisible ? <span>{format(totalTime)}</span> : <span>Loading...</span>}
-                <div className="justify-center items-center">Project Name: {projectTitle}</div>
-                <div className="justify-center items-center">{projectUser}</div>
-            </div>
-        );
     };
 
 ///Project select useEffect
@@ -81,7 +61,7 @@ export default function MainPage() {
             };
             fetchStatistics();
         }
-    }, [selectedProject]);
+    }, [selectedProject, dispatch]);
 
 
     function handleClick() {
@@ -160,7 +140,6 @@ export default function MainPage() {
     const minutes = Math.floor((elapsedTime % 3600) / 60);
     const hours = Math.floor(elapsedTime / 3600);
     const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    //
 
     return (
         <div className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 min-h-screen flex flex-col items-center justify-center pt-20">

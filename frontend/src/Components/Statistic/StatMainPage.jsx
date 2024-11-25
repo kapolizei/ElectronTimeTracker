@@ -1,8 +1,9 @@
-import React, {useState} from "react";
-import {easyFormatTotalTime, FormatMin, formatTotalTime} from "./FormatTotalTime";
+import React, {useState, useEffect} from "react";
+import {FormatMin} from "../Functions/FormatTotalTime";
 import { useSelector } from "react-redux";
+import StatActivity from "./StatActivity";
 
-export default function StatisticDataPage () {
+export default function StatMainPage () {
     const fetchData = useSelector((state)=> state.data);
 
     const [apiData, setApiData] = useState([]);
@@ -10,10 +11,26 @@ export default function StatisticDataPage () {
     const wod = String(fetchData?.total_time || '');
     const regExp = 'минут'
     const totalTime = wod.replace(regExp, '');
-    const tasks = fetchData.projectData?.tasks || [];
+    /*const tasks = fetchData.projectData?.tasks || [];*/
+    const [tasks, setTasks] = useState(null)
     const easyFormattedTime = FormatMin(totalTime)
     const [activeIndex, setActiveIndex] = useState(null);
-    const projectTitle = fetchData.project_title || 'No project title available'
+/*
+    const projectTitle = fetchData.project_title || 'Loading...'
+*/
+
+    const [projectTitle, setProjectTitle] = useState(() => {
+        return localStorage.getItem('project_title') || 'Loading';
+    });
+
+    useEffect(() => {
+        if (fetchData) {
+            setProjectTitle(fetchData.project_title);
+            localStorage.setItem('project_title', fetchData.project_title);
+
+            setTasks(fetchData.projectData?.tasks)
+        }
+    }, [fetchData?.project_title]);
 
     const data = [
         {
@@ -44,23 +61,8 @@ export default function StatisticDataPage () {
     return (
         <div className="rounded-md ">
             <h1 className="text-white text-2xl font-bold p-5">Activity reports</h1>
-            <div className="text-blue-50 w-full h-1/3  rounded-lg p-2 flex items-stretch  min-w-max">
-                <div className="w-1/3 flex justify-center items-center text-white bg-gray-700 shadow-2xl">
-                    <h1>TIME: {easyFormattedTime}</h1><br/>
-                </div>
 
-                <div className="w-px  mx-2"/>
-
-                <div className="w-1/3 flex justify-center items-center text-white bg-gray-700 shadow-2xl">
-                    <h1>AVG ACTIVITY 55%</h1>
-                </div>
-
-                <div className=" bg-gray-300 mx-2"/>
-
-                <div className="w-1/3 flex justify-center items-center text-white bg-gray-700 shadow-2xl">
-                    <p>///</p>
-                </div>
-            </div>
+            <StatActivity/>
 
             <div className="flex flex-col items-center p-5 w-full bg-gray-700">
                 <h1 className="text-white text-2xl font-bold mb-5">Activity of the project '{projectTitle}'</h1>
@@ -127,8 +129,7 @@ export default function StatisticDataPage () {
                                 <td className="px-4 py-2 text-white"></td>
                                 <td className="px-4 py-2 text-white">{easyFormattedTime}</td>
                                 <td className="px-4 py-2 text-white">{day.total.activity}</td>
-                                <button onClick={handleShowTasks}
-                                        className="bg-blue-400 px-4 py-2 my-2 rounded-xl">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
+                                <button onClick={handleShowTasks} className="bg-blue-400 px-4 py-2 my-2 rounded-xl">{showTasks ? 'Hide Tasks' : 'Show Tasks'}</button>
 
                                 {showTasks && tasks.length > 0 ? (
                                     <ul>

@@ -1,6 +1,8 @@
 import '../App.css';
 import {NavLink} from "react-router-dom";
+/*
 import AccountButton from "./AccountButton";
+*/
 
 export default function Header() {
     return (
@@ -29,7 +31,9 @@ export default function Header() {
                         <li>
                             <NavLink className="text-white hover:text-blue-500 transition-all"
                                      to={'/account'}>
+{/*
                                 <AccountButton/>
+*/}
                             </NavLink>
                         </li>
                         <li>

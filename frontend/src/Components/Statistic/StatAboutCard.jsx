@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {ExclamationCircleIcon} from "@heroicons/react/16/solid";
 
-export default function StatisticAboutCard() {
+export default function StatAboutCard() {
     const [username, setUsername] = useState(null)
     const ref = useRef()
     const handleClick = () => {

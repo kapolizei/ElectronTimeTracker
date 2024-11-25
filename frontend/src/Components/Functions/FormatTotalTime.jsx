@@ -25,7 +25,7 @@ export const FormatMin = (totalMinutes) => {
 }
 
 export const format = (totalTime) => {
-        const totalMinutes = parseFloat(totalTime.replace(" минут", ""));
+        const totalMinutes = parseFloat(totalTime);
         const hours = Math.floor(totalMinutes / 60);
         const minutes = Math.round(totalMinutes % 60);
         return `${hours} ч ${minutes} мин`;
